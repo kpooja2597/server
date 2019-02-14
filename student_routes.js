@@ -23,10 +23,12 @@ module.exports = function(app, db) {
         if (result) {
           map['status']='success';
           map['user']=result;
+          
         }
         else
         {
           map['status']='error';
+          
         }
         console.log(map);
         res.send(map);
@@ -51,7 +53,7 @@ module.exports = function(app, db) {
     //validate
 
     console.log(user);
-
+  
     db.collection('student').findOne({username:user.Username},(err,student)=>{
       console.log('found user',student);
       if(student)
@@ -67,7 +69,6 @@ module.exports = function(app, db) {
           if (err) {
             res.send({status:'error'});
           } else {
-            res.send({status:'success'});
           }
         });
           }
@@ -87,7 +88,7 @@ module.exports = function(app, db) {
       { _id: new mongo.ObjectId(_id) },
       { $set: user },
       (err, result) => {
-        // console.log(err,result);
+        console.log(err,result);
         if (err) {
           res.send('error');
         } else {
