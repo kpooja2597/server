@@ -1,7 +1,7 @@
 let mongo = require('mongodb');
 
 module.exports = function(app, db) {
-  app.get('/coursecontent/gettutor', (req, res) => {
+  app.get('/coursecontent/getcourse', (req, res) => {
     let id = req.query['id'];
 
     db.collection('coursecontent').findOne(
@@ -15,7 +15,6 @@ module.exports = function(app, db) {
   app.get('/coursecontent/uploadcoursecontent', (req, res) => {
 
     let request=req.body;
-
     let url=request.url;
     let title=request.title;
     let courseid=request.courseid;
@@ -23,7 +22,7 @@ module.exports = function(app, db) {
 
     let id = req.query['id'];
 
-    db.collection('tutor').deleteOne(
+    db.collection('coursecontent').deleteOne(
       { _id: new mongo.ObjectId(id) },
       (err, result) => {
           res.send("success");
@@ -31,34 +30,6 @@ module.exports = function(app, db) {
     );
   });
 
-  app.post('/tutor/addtutor', (req, res) => {
-    console.log('addtutor');
-    let user = req.body;
-    db.collection('tutor').insertOne(user, (err, result) => {
-      if (err) {
-        res.send('error');
-      } else {
-        res.send('success');
-      }
-    });
-  });
-
-  app.post('/student/updatetutor', (req, res) => {
-    console.log('addtutor');
-    let user = req.body;
-    let _id = user._id;
-    delete user['_id'];
-
-    db.collection('tutor').updateOne(
-      { _id: _id },
-      { $set: user },
-      (err, result) => {
-        if (err) {
-          res.send('error');
-        } else {
-          res.send('success');
-        }
-      }
-    );
-  });
+  
+  
 }; //exports

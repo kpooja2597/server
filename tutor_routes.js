@@ -35,7 +35,7 @@ module.exports = function(app, db) {
     });
   });
 
-  app.post('/student/updatetutor', (req, res) => {
+  app.post('/tutor/updatetutor', (req, res) => {
     console.log('addtutor');
     let user = req.body;
     let _id = user._id;
