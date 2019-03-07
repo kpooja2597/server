@@ -126,51 +126,17 @@ module.exports = function(app, db) {
     );
   });
 
-  app.post('/subject/createvideolist', (req, res) => {
-    console.log('createvideolist');
-    let request = req.body;
-    let subjectid = request.subjectid;
-    let chapterid = request.chapterid;
-    db.collection('subject').findMany(
-      { _id: new mongo.ObjectId(subjectid) },
-      (err, subjectid) => {
-        if (!subject.chapters) subject.chapters = [];
-        subject.chapters.push(chapterid);
-        res.send(subjectid);
+ 
+  app.get('/student/getallstudent', (req, res) => {
+    console.log('getallstudent');
+    let getallstudent = req.body;
+    db.collection('student').findOne(getallstudent, (err, result) => {
+      if (err) {
+        res.send('error');
+      } else {
+        res.send('success');
       }
-    );
+    });
   });
 
-  app.post('/student/getvideolist', (req, res) => {
-    console.log('getvideolist');
-    let request = req.body;
-    //let studentid = request.studentid;
-    //let courseid = request.courseid;
-    let subjectid = request.subjectid;
-    let chapterid = request.chapterid;
-
-    //  app.post('/student/getstudentprofile', (req, res) => {
-    //   console.log('getstudentprofile');
-    //     let request = req.body;
-    //     let studentid = request.studentid;
-    //     let courseid = request.courseid;
-    //     let subjectid=request.subjectid
-    //     let chapter=request.chapter
-
-    //     db.collection('student').findOne({_id:new mongo.ObjectId(studentid)},(err,student)=>{
-    //       if(!student.courses) student.courses=[];
-
-    //       student.courses.push(courseid);
-
-    //       db.collection('student').findOne({_id:new mongo.ObjectId(subjectid)},(err,subject)=>{
-    //         if(!subject.chapters) subject.chapters=[];
-    //         //retrieve subject from db
-
-    //           subject.chapters.push(chapter);
-
-    //         //update subject
-    //       });
-    //     });
-    //   });
-  });
 };

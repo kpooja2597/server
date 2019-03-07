@@ -16,6 +16,53 @@ module.exports = function(app, db) {
     );
   });
 
+  app.post('/question/addquestion', (req, res) => {
+    console.log('addquestion');
+    let que = req.body;
+    //validate
+
+    console.log(que);
+  
+    db.collection('question').findOne(que,(err,res)=>{
+      //console.log('found user',student);
+      if(res)
+      {
+        let map={};
+        map['status']='error';
+        map['message']='question  already exists';
+        res.send(map);
+      }
+      else
+      {
+        db.collection('question').insertOne(que, (err, result) => {
+          if (err) {
+            res.send({status:'error'});
+          } else {
+            res.send({status:'result'});
+          }
+        });
+          }
+    });
+
+  });
+
+  app.post('/question/updatequestion', (req, res) => {
+    console.log('updatequestion');
+    let que = req.body;
+    console.log(user);
+  
+    db.collection('question').updateOne(
+      { _id: new mongo.ObjectId(_id) },(err, result) => {
+        console.log(err,result);
+        if (err) {
+          res.send('error');
+        } else {
+          res.send('success');
+        }
+      }
+    );
+  });
+
   app.get('/question/getquestionbytags', (req, res) => {
     let tagstr = req.query['tags'];
 
@@ -33,19 +80,6 @@ module.exports = function(app, db) {
     );
   });
 
-
-  app.post('/question/addquestion', (req, res) => {
-    console.log('addquestion');
-    let que = req.body;
-    db.collection('question').insertOne(que, (err, result) => {
-      if (err) {
-        res.send('error');
-      } else {
-        res.send('success');
-      }
-    });
-  });
-
   app.get('/question/getquestiontype', (req, res) => {
     console.log('getquestiontype');
     let que_type = req.body;
@@ -58,6 +92,7 @@ module.exports = function(app, db) {
       }
     });
   });
+
 
   app.post('/question/getoptions', (req, res) => {
     console.log('getoptions');
@@ -72,3 +107,17 @@ module.exports = function(app, db) {
     });
   });
 }; //exports
+
+
+
+  // app.post('/question/addquestion', (req, res) => {
+  //   console.log('addquestion');
+  //   let que = req.body;
+  //   db.collection('question').insertOne(que, (err, result) => {
+  //     if (err) {
+  //       res.send('error');
+  //     } else {
+  //       res.send('success');
+  //     }
+  //   });
+  // });
