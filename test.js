@@ -7,29 +7,18 @@ module.exports = function(app, db) {
     db.collection('test').findOne(
       { _id: new mongo.ObjectId(id) },
       (err, result) => {
-        if (result) {
-          res.send(result);
-        } else {
-          res.send('error');
-        }
+      res.send(result);
       }
     );
   });
 
   app.get('/test/gettestbytags', (req, res) => {
-    let tagstr = req.query['tags'];
+    let tags = (req.query['tags']||'').toLowerCase();
 
-    let tags = tagstr.split(',');
+    let tagarray=tags.split(',');
 
-    db.collection('test')
-      .find({ _id: new mongo.ObjectId(id) })
-      .toArray()
-      .then((err, result) => {
-        if (result) {
-          res.send(result);
-        } else {
-          res.send('error');
-        }
+    db.collection('test').find({ _id: new mongo.ObjectId(id) }).toArray().then((err, result) => {
+        res.send(docs);
       });
   });
 

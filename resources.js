@@ -26,15 +26,23 @@ module.exports = function(app, db) {
 
 
   app.post('/resources/updateresources', (req, res) => {
-
-    let request=req.body;
-    let id = req.query['id'];
-
+    console.log('updateresources');
+    let resources=req.body;
+    console.log('resources');
+    let _id = resources._id;
+    console.log(_id);
+    delete resources['_id'];
     db.collection('resources').updateOne(
-      { _id: new mongo.ObjectId(id) },
-      (err, result) => {
-          res.send("success");
+    {_id: new mongo.ObjectId(_id)},
+    {$set: resources},
+    (errr,result)=>{
+      console.log(err,result);
+      if(err){
+        res.send('error');
+      }else{
+        res.send('success');
       }
+    }
     );
   });
 
@@ -50,31 +58,20 @@ module.exports = function(app, db) {
   });
 
   app.get('/resources/getresourcesbytags', (req, res) => {
-    let tagstr = req.query['tags'];
+    let tags = (req.query['tags']||'').toLowerCase();
 
-    let tags=tagstr.split(',');
-
-    db.collection('resources').findOne(
-      { _id: new mongo.ObjectId(id) },
-      (err, result) => {
-        if (result) {
-          res.send(result);
-        } else {
-          res.send('error');
-        }
-      }
-    );
+    let tagarray=tags.split(',');
+    
+    db.collection('resources').find({TagArray:{$all:tagarray}}).toArray().then((docs)=>{
+        res.send(docs);
+    });
   });
 
   app.get('/resources/getallresources', (req, res) => {
     console.log('getallresources');
     let getallvideo = req.body;
-    db.collection('resources').findOne(getallvideo, (err, result) => {
-      if (err) {
-        res.send('error');
-      } else {
-        res.send('success');
-      }
+    db.collection('resources').find({}).toArray().then((docs) => {
+        res.send(docs);
     });
   });
 

@@ -23,9 +23,9 @@ module.exports = function(app, db) {
 
     console.log(que);
   
-    db.collection('question').findOne(que,(err,res)=>{
+    db.collection('question').findOne({name:que.name},(err,result)=>{
       //console.log('found user',student);
-      if(res)
+      if(result)
       {
         let map={};
         map['status']='error';
@@ -38,74 +38,73 @@ module.exports = function(app, db) {
           if (err) {
             res.send({status:'error'});
           } else {
-            res.send({status:'result'});
+            res.send({status:'success'});
           }
         });
-          }
+         0 }
     });
 
   });
 
   app.post('/question/updatequestion', (req, res) => {
     console.log('updatequestion');
-    let que = req.body;
-    console.log(user);
-  
-    db.collection('question').updateOne(
-      { _id: new mongo.ObjectId(_id) },(err, result) => {
-        console.log(err,result);
-        if (err) {
-          res.send('error');
-        } else {
-          res.send('success');
-        }
-      }
+    let question = req.body;
+    console.log(question);
+    let _id = question._id;
+        console.log(_id);
+        delete question['_id'];
+        db.collection('question').updateOne(
+          { _id: new mongo.ObjectId(_id) },
+          { $set: question },
+          (err, result) => {
+            console.log(err,result);
+            if (err) {
+              res.send('error');
+            } else {
+              res.send('success');
+            }
+          }
     );
   });
+
 
   app.get('/question/getquestionbytags', (req, res) => {
-    let tagstr = req.query['tags'];
+    let tags = (req.query['tags']||'').toLowerCase();
 
-    let tags=tagstr.split(',');
+    let tagarray=tags.split(',');
 
-    db.collection('question').findOne(
-      { _id: new mongo.ObjectId(id) },
-      (err, result) => {
-        if (result) {
-          res.send(result);
-        } else {
-          res.send('error');
-        }
-      }
-    );
-  });
-
-  app.get('/question/getquestiontype', (req, res) => {
-    console.log('getquestiontype');
-    let que_type = req.body;
-
-    db.collection('question').insertOne(que_type, (err, result) => {
-      if (err) {
-        res.send('error');
-      } else {
-        res.send('success');
-      }
+    db.collection('question').find({TagArray:{$all:tagarray}}).toArray().then((docs)=>{
+      //   console.log(docs);
+        res.send(docs);
     });
   });
 
+  // app.get('/question/getquestiontype', (req, res) => {
+  //   console.log('getquestiontype');
+  //   let que_type = req.body;
 
-  app.post('/question/getoptions', (req, res) => {
-    console.log('getoptions');
-    let options = req.body;
+  //   db.collection('question').insertOne(que_type, (err, result) => {
+  //     if (err) {
+  //       res.send('error');
+  //     } else {
+  //       res.send('success');
+  //     }
+  //   });
+  // });
 
-    db.collection('question').insertOne(options, (err, result) => {
-      if (err) {
-        res.send('error');
-      } else {
-        res.send('success');
-      }
-    });
-  });
+
+  // app.post('/question/getoptions', (req, res) => {
+  //   console.log('getoptions');
+  //   let options = req.body;
+
+  //   db.collection('question').insertOne(options, (err, result) => {
+  //     if (err) {
+  //       res.send('error');
+  //     } else {
+  //       res.send('success');
+  //     }
+  //   });
+  // });
 }; //exports
 
 

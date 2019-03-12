@@ -38,14 +38,14 @@ module.exports=function(app,db)
      
       app.post('/category/updatecategory', (req, res) => {
         console.log('updatecategory');
-        let user = req.body;
-        console.log(user);
-        let _id = user._id;
+        let category = req.body;
+        console.log(category);
+        let _id = category._id;
         console.log(_id);
-        delete user['_id'];
+        delete category['_id'];
         db.collection('category').updateOne(
           { _id: new mongo.ObjectId(_id) },
-          { $set: user },
+          { $set: category },
           (err, result) => {
             console.log(err,result);
             if (err) {
