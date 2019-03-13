@@ -5,7 +5,7 @@ module.exports = function(app, db) {
     let id = req.query['id'];
 
     db.collection('coursecontent').findOne(
-      { _id: new mongo.ObjectId(id) },
+      { _id: new mongo.ObjectId(id)  },
       (err, result) => {
         res.send(result);
       }
