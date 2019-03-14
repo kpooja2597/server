@@ -1,13 +1,13 @@
 let mongo = require('mongodb');
 module.exports = function(app, db) {
   app.get('/category/getallcategories', (req, res) => {
-    let id=req.query['id'];
-    if(id) id=new mongo.ObjectId(id);
+    let id = req.query['id'];
+    if (id) id = new mongo.ObjectId(id);
     db.collection('category')
-      .find({parent:id})
+      .find({ parent: id })
       .toArray()
-      .then((result) => {
-        console.log('getallcategories',result);
+      .then(result => {
+        console.log('getallcategories', result);
         res.send(result);
       });
   });
@@ -25,8 +25,11 @@ module.exports = function(app, db) {
 
   app.post('/category/addcategory', (req, res) => {
     console.log('addcategory');
-    let addingtest = req.body;
-    db.collection('category').insertOne(addingtest, (err, result) => {
+    let category = req.body;
+    if (category.parent) {
+      category.parent = new mongo.ObjectId(category.parent);
+    }
+    db.collection('category').insertOne(category, (err, result) => {
       if (err) {
         res.send('error');
       } else {

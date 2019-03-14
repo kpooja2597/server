@@ -84,13 +84,11 @@ module.exports = function(app, db) {
 
   app.get('/coursecontent/getallcoursecontent', (req, res) => {
     console.log('getallcoursecontent');
-    let getallcoursecontent = req.body;
-    db.collection('coursecontent').findOne(getallcoursecontent, (err, result) => {
-      if (err) {
-        res.send('error');
-      } else {
-        res.send('success');
-      }
+    let categoryid=req.query['categoryid'];
+    console.log('getallcoursecontent',categoryid);
+    db.collection('coursecontent').find({categoryid:categoryid}).toArray().then((result) => {
+      console.log('getallcoursecontent result',result);
+        res.send(result);
     });
   });
 
