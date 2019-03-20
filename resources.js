@@ -70,7 +70,7 @@ module.exports = function(app, db) {
   app.get('/resources/getallresources', (req, res) => {
     console.log('getallresources');
     let getallvideo = req.body;
-    db.collection('resources').find({}).toArray().then((docs) => {
+    db.collection('resources').find({parent:id}).toArray().then((docs) => {
         res.send(docs);
     });
   });
