@@ -17,32 +17,33 @@ module.exports = function(app, db) {
   });
 
   app.post('/question/addquestion', (req, res) => {
-    console.log('addquestion');
     let que = req.body;
+    console.log('addquestion',que);
     //validate
 
     console.log(que);
   
-    db.collection('question').findOne({name:que.name},(err,result)=>{
-      //console.log('found user',student);
-      if(result)
-      {
-        let map={};
-        map['status']='error';
-        map['message']='question  already exists';
-        res.send(map);
-      }
-      else
-      {
-        db.collection('question').insertOne(que, (err, result) => {
+    // db.collection('question').findOne({name:que.name},(err,result)=>{
+    //   //console.log('found user',student);
+    //   if(result)
+    //   {
+    //     let map={};
+    //     map['status']='error';
+    //     map['message']='question  already exists';
+    //     res.send(map);
+    //   }
+    //   else
+    //   {
+        q=JSON.parse(que.question);
+        db.collection('question').insertOne(q, (err, result) => {
           if (err) {
             res.send({status:'error'});
           } else {
             res.send({status:'success'});
           }
         });
-         0 }
-    });
+  //      }
+  //   });
 
   });
 
