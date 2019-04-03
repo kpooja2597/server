@@ -14,11 +14,12 @@ module.exports = function(app, db) {
 
   app.get('/test/gettestbytags', (req, res) => {
     let tags = (req.query['tags']||'').toLowerCase();
+    console.log('gettestbytags',tags);
 
     let tagarray=tags.split(',');
 
-    db.collection('test').find({ _id: new mongo.ObjectId(id) }).toArray().then((err, result) => {
-        res.send(docs);
+    db.collection('test').find({TagArray:{$all:tagarray}}).toArray().then((result) => {
+        res.send(result);
       });
   });
 

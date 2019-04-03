@@ -71,14 +71,22 @@ module.exports = function(app, db) {
 
   app.get('/question/getquestionbytags', (req, res) => {
     let tags = (req.query['tags']||'').toLowerCase();
+    let n=parseInt(req.query['n']);
+
+    console.log('getquestionbytags',tags,n);
 
     let tagarray=tags.split(',');
 
-    db.collection('question').find({TagArray:{$all:tagarray}}).toArray().then((docs)=>{
+    db.collection('question').aggregate([{$match:{TagArray:{$all:tagarray}}},{$sample:{size:n}}]).toArray().then((docs)=>{
       //   console.log(docs);
         res.send(docs);
     });
   });
+  //   db.collection('question').find({TagArray:{$all:tagarray}}).toArray().then((docs)=>{
+  //     //   console.log(docs);
+  //       res.send(docs);
+  //   });
+  // });
 
   // app.get('/question/getquestiontype', (req, res) => {
   //   console.log('getquestiontype');
