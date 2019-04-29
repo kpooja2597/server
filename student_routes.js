@@ -15,20 +15,18 @@ module.exports = function(app, db) {
   app.get('/student/login', (req, res) => {
     let username = req.query['username'];
     let password = req.query['password'];
+    console.log(username, password);
+    
 
     db.collection('student').findOne(
-      { username: username, password: password },
+      { Username: username, Password: password },
       (err, result) => {
         let map = {};
         if (result) {
-          map['status']='success';
-          map['user']=result;
-          
-        }
-        else
-        {
-          map['status']='error';
-          
+          map['status'] = 'success';
+          map['student'] = result;
+        } else {
+          map['status'] = 'error';
         }
         console.log(map);
         res.send(map);
@@ -53,27 +51,26 @@ module.exports = function(app, db) {
     //validate
 
     console.log(user);
-  
-    db.collection('student').findOne({username:user.Username},(err,student)=>{
-      console.log('found user',student);
-      if(student)
-      {
-        let map={};
-        map['status']='error';
-        map['message']='username already exists';
-        res.send(map);
-      }
-      else
-      {
-        db.collection('student').insertOne(user, (err, result) => {
-          if (err) {
-            res.send({status:'error'});
-          } else {
-          }
-        });
-          }
-    });
 
+    db.collection('student').findOne(
+      { username: user.Username },
+      (err, student) => {
+        console.log('found user', student);
+        if (student) {
+          let map = {};
+          map['status'] = 'error';
+          map['message'] = 'username already exists';
+          res.send(map);
+        } else {
+          db.collection('student').insertOne(user, (err, result) => {
+            if (err) {
+              res.send({ status: 'error' });
+            } else {
+            }
+          });
+        }
+      }
+    );
   });
 
   app.post('/student/updatestudent', (req, res) => {
@@ -88,7 +85,7 @@ module.exports = function(app, db) {
       { _id: new mongo.ObjectId(_id) },
       { $set: user },
       (err, result) => {
-        console.log(err,result);
+        console.log(err, result);
         if (err) {
           res.send('error');
         } else {
@@ -126,7 +123,6 @@ module.exports = function(app, db) {
     );
   });
 
- 
   app.get('/student/getallstudent', (req, res) => {
     console.log('getallstudent');
     let getallstudent = req.body;
@@ -138,5 +134,4 @@ module.exports = function(app, db) {
       }
     });
   });
-
 };

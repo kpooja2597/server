@@ -74,6 +74,7 @@ module.exports = function(app, db) {
     let n=parseInt(req.query['n']);
 
     console.log('getquestionbytags',tags,n);
+    console.log(req.query['n']);
 
     let tagarray=tags.split(',');
 
